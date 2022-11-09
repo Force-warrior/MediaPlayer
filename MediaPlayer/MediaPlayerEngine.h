@@ -9,7 +9,12 @@ public:
 
 
 public:
-	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	LRESULT CALLBACK WndProc(HWND hWnd, HINSTANCE hInst, UINT message, WPARAM wParam, LPARAM lParam);
 
+private:
+	HWND hVideoRender;
+	HWND hAudioStart;
+	HWND hAudioStop;
+	HWND hAudioPause;
 };
 

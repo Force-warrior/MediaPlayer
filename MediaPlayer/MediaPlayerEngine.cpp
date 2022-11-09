@@ -5,8 +5,11 @@
 #include "define.h"
 #include "sdl/SDL.h"
 
+#include "SDLVideoRender.h"
+
 #define REFRESH_EVENT (SDL_USEREVENT+1)
 #define BREAK_EVENT (SDL_USEREVENT+2)
+#define QUIT_EVENT (SDL_USEREVENT+3)
 
 MediaPlayerEngine::MediaPlayerEngine() {
 
@@ -19,7 +22,7 @@ MediaPlayerEngine* MediaPlayerEngine::getEngine() {
 	return &obj;
 }
 
-int screen_w = 500, screen_h = 500;
+int screen_w = 320, screen_h = 240;
 const int pixel_w = 320, pixel_h = 180;
 const int bpp = 32;
 unsigned char buffer[pixel_w*pixel_h*bpp / 8];
@@ -47,7 +50,13 @@ int onSDLVideo(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		return -1;
 	}
 
-	SDL_Window* sdl_w = SDL_CreateWindow("player", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_w, screen_h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	SDL_Window* sdl_w;
+	if (IsWindowVisible(hWnd)) {
+		sdl_w = SDL_CreateWindowFrom(hWnd);
+	}
+	else {
+		sdl_w = SDL_CreateWindow("player", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_w, screen_h, SDL_WINDOW_BORDERLESS);
+	}
 	if (!sdl_w) {
 		return -1;
 	}
@@ -86,7 +95,6 @@ int onSDLVideo(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 				fseek(file, 0, SEEK_SET);
 				fread(buffer, 1, pixel_w*pixel_h*bpp / 8, file);
 			}
-
 			SDL_UpdateTexture(sdl_texture,NULL , buffer, pixel_w*4);
 			SDL_RenderClear(sdl_render);
 			SDL_RenderCopy(sdl_render, sdl_texture, NULL, &sdlRect);
@@ -101,7 +109,7 @@ int onSDLVideo(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		
 		if (thread_exit) {
 			SDL_Quit();
-			return 0;
+			break;
 		}
 			
 	}
@@ -109,11 +117,15 @@ int onSDLVideo(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	return 0;
 }
 
-void onSDLAudio(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-
+int onSDLAudio(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	if (SDL_Init(SDL_INIT_AUDIO)) {
+		return -1;
+	}
 }
 
-LRESULT CALLBACK MediaPlayerEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+static SDLVideoRender sdlrender;
+
+LRESULT CALLBACK MediaPlayerEngine::WndProc(HWND hWnd, HINSTANCE hInst, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message)
 	{
 	case WM_COMMAND:
@@ -123,10 +135,21 @@ LRESULT CALLBACK MediaPlayerEngine::WndProc(HWND hWnd, UINT message, WPARAM wPar
 		switch (wmId)
 		{
 		case IDB_SDL_AUDIO:
+			hAudioStart = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Start"), WS_VISIBLE | WS_CHILD,
+				150, 260, 120, 30, hWnd, (HMENU)IDB_SDL_VIDEO, hInst, 0);
+			hAudioStop = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Stop"), WS_VISIBLE | WS_CHILD,
+				300, 260, 120, 30, hWnd, (HMENU)IDB_SDL_VIDEO, hInst, 0);
+			hAudioPause = CreateWindowEx(0, TEXT("BUTTON"), TEXT("Pause"), WS_VISIBLE | WS_CHILD,
+				450, 260, 120, 30, hWnd, (HMENU)IDB_SDL_VIDEO, hInst, 0);
+
 			onSDLAudio(hWnd, message, wParam, lParam);
 			break;
 		case IDB_SDL_VIDEO:
-			onSDLVideo(hWnd, message, wParam, lParam);
+			hVideoRender = CreateWindowEx(0, TEXT("BUTTON"), TEXT("SDL PlayVideo"), WS_VISIBLE | WS_CHILD,
+				150, 10, screen_w, screen_h, hWnd, (HMENU)IDB_SDL_VIDEO, hInst, 0);
+			//onSDLVideo(hVideoRender, message, wParam, lParam);
+			
+			sdlrender.initialization(hVideoRender, 320, 180, 1);
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
@@ -137,7 +160,7 @@ LRESULT CALLBACK MediaPlayerEngine::WndProc(HWND hWnd, UINT message, WPARAM wPar
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
-		// TODO: 在此处添加使用 hdc 的任何绘图代码...
+		// TODO: 在此处添加使用 hdc 的任何绘图代sdlrender码...
 		EndPaint(hWnd, &ps);
 	}
 	break;

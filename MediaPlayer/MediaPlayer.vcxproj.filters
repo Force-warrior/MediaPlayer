@@ -33,12 +33,21 @@
     <ClInclude Include="MediaPlayerEngine.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="IVideoRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLVideoRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MediaPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MediaPlayerEngine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLVideoRender.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

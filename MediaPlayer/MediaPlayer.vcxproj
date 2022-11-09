@@ -23,7 +23,7 @@
     <ProjectGuid>{11911D38-2FBC-4455-BF06-532BF5427C0F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MediaPlayer</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -157,14 +157,17 @@
   <ItemGroup>
     <ClInclude Include="define.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="IVideoRender.h" />
     <ClInclude Include="MediaPlayer.h" />
     <ClInclude Include="MediaPlayerEngine.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SDLVideoRender.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MediaPlayer.cpp" />
     <ClCompile Include="MediaPlayerEngine.cpp" />
+    <ClCompile Include="SDLVideoRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MediaPlayer.rc" />

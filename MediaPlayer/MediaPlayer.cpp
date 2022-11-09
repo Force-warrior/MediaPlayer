@@ -120,7 +120,7 @@ void onCreateMainWindow(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		10, 10, 120, 30, hWnd, (HMENU)IDB_SDL_VIDEO, hInst, 0);
 
 	CreateWindowEx(0, TEXT("BUTTON"), TEXT("SDL PlayAudio"), WS_VISIBLE | WS_CHILD,
-		150, 10, 120, 30, hWnd, (HMENU)IDB_SDL_AUDIO, hInst, 0);
+		10, 260, 120, 30, hWnd, (HMENU)IDB_SDL_AUDIO, hInst, 0);
 
 }
 
@@ -151,8 +151,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DestroyWindow(hWnd);
                 break;
             default:
-				return MediaPlayerEngine::getEngine()->WndProc(hWnd, message, wParam, lParam);
-                return DefWindowProc(hWnd, message, wParam, lParam);
+				return MediaPlayerEngine::getEngine()->WndProc(hWnd, hInst, message, wParam, lParam);
             }
         }
         break;
@@ -168,11 +167,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
-        PostQuitMessage(0);
+		MediaPlayerEngine::getEngine()->WndProc(hWnd, hInst, message, wParam, lParam);
         break;
     default:
-		return MediaPlayerEngine::getEngine()->WndProc(hWnd, message, wParam, lParam);
-        return DefWindowProc(hWnd, message, wParam, lParam);
+		return MediaPlayerEngine::getEngine()->WndProc(hWnd, hInst, message, wParam, lParam);
     }
     return 0;
 }
