@@ -12,9 +12,16 @@ public:
 	LRESULT CALLBACK WndProc(HWND hWnd, HINSTANCE hInst, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
-	HWND hVideoRender;
-	HWND hAudioStart;
-	HWND hAudioStop;
-	HWND hAudioPause;
+//sdl
+	HWND hSdlVideoRender;
+	HWND hSdlAudioStart;
+	HWND hSdlAudioStop;
+	HWND hSdlAudioPause;
+
+// d3d
+	HWND hD3dVideoRender;
+	HWND hD3dAudioStart;
+	HWND hD3dAudioStop;
+	HWND hD3dAudioPause;
 };
 

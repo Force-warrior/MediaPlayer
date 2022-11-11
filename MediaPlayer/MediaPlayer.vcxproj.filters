@@ -39,6 +39,9 @@
     <ClInclude Include="SDLVideoRender.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="D3DVideoRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MediaPlayer.cpp">
@@ -48,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SDLVideoRender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DVideoRender.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

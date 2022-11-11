@@ -54,6 +54,10 @@ int SDLVideoRender::release() {
 	return 0;
 }
 
+void createVitualData() {
+
+}
+
 int SDLVideoRender::renderFrame() {
 	if (!sdl_init) return -1;
 
@@ -85,15 +89,14 @@ void SDLVideoRender::ThreadRender(std::shared_ptr<RenderThreadData> data_ptr) {
 	const int mPicWidth = 320;
 	const int mPicHeight = 180;
 
-	const int bpp = 32;
+	const int bpp = 12;
 	unsigned char buffer[mPicWidth*mPicHeight*bpp / 8];
 
 	FILE* file = nullptr;
-	file = fopen("../third_party/res/bgra_320x180.rgb", "rb+");
+	file = fopen("../third_party/res/yuv420p_320x180.yuv", "rb+");
 	if (!file) {
 		return ;
 	}
-
 
 	while (true) {
 		if (!sdlWindow) {
@@ -122,15 +125,12 @@ void SDLVideoRender::ThreadRender(std::shared_ptr<RenderThreadData> data_ptr) {
 			}
 		}
 
-
-
 		if (!sdlTexture) {
-			sdlTexture = SDL_CreateTexture(sdlRender, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_STREAMING, mPicWidth, mPicHeight);
+			sdlTexture = SDL_CreateTexture(sdlRender, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING, mPicWidth, mPicHeight);
 			if (!sdlTexture) {
 				break;
 			}
 		}
-
 
 		if (fread(buffer, 1, mPicWidth*mPicHeight*bpp / 8, file) != mPicWidth * mPicHeight*bpp / 8) {
 			// Loop
@@ -143,11 +143,12 @@ void SDLVideoRender::ThreadRender(std::shared_ptr<RenderThreadData> data_ptr) {
 		sdlRect.w = mWindowWith;
 		sdlRect.h = mWindowHeight;
 
-		SDL_UpdateTexture(sdlTexture, NULL, buffer, mPicWidth * 4);
+		SDL_UpdateTexture(sdlTexture, NULL, buffer, mPicWidth);
+
 		SDL_RenderClear(sdlRender);
 		SDL_RenderCopy(sdlRender, sdlTexture, NULL, &sdlRect);
 		SDL_RenderPresent(sdlRender);
-		SDL_Delay(40);
+		//SDL_Delay(40);
 
 	}
 

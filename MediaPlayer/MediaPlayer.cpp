@@ -122,6 +122,12 @@ void onCreateMainWindow(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	CreateWindowEx(0, TEXT("BUTTON"), TEXT("SDL PlayAudio"), WS_VISIBLE | WS_CHILD,
 		10, 260, 120, 30, hWnd, (HMENU)IDB_SDL_AUDIO, hInst, 0);
 
+	CreateWindowEx(0, TEXT("BUTTON"), TEXT("D3D PlayVideo"), WS_VISIBLE | WS_CHILD,
+		600, 10, 120, 30, hWnd, (HMENU)IDB_D3D_VIDEO, hInst, 0);
+
+	CreateWindowEx(0, TEXT("BUTTON"), TEXT("D3D PlayAudio"), WS_VISIBLE | WS_CHILD,
+		600, 260, 120, 30, hWnd, (HMENU)IDB_D3D_AUDIO, hInst, 0);
+
 }
 
 //

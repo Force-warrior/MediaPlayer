@@ -1,24 +1,22 @@
 #pragma once
-#ifndef SDL_VIDEORENDER_H_
-#define SDL_VIDEORENDER_H_
-
 #include "IVideoRender.h"
-
 #include <memory>
 #include <thread>
 #include <mutex>
+#include <d3d9.h>
 
-#include "sdl/SDL.h"
-class SDLVideoRender :
+
+class D3DVideoRender :
 	public IVideoRender{
+
 public:
-	SDLVideoRender();
-	virtual ~SDLVideoRender();
+	D3DVideoRender();
+	virtual ~D3DVideoRender();
 	virtual int initialization(void* hwnd, int w, int h, int flag) override;
 	virtual int release()override;
 	virtual int renderFrame() override;
 private:
-	struct RenderThreadData{
+	struct RenderThreadData {
 		RenderThreadData(void* hwnd, int flag) {
 			this->hWnd = hwnd;
 			this->window_w = 0;
@@ -41,9 +39,10 @@ private:
 private:
 	std::thread *mRenderThread;
 	std::shared_ptr<RenderThreadData> mRenderThreadData;
+	IDirect3D9 *m_pDirect3D9;
+	IDirect3DDevice9* m_pDirect3DDevice;
+	IDirect3DSurface9* m_pD3dSurface;
+	bool d3d_init = false;
 
-	bool sdl_init = false;
 };
-
-#endif // !SDL_VIDEORENDER_H_
 
